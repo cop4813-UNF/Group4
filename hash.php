@@ -3,9 +3,8 @@
 
  
 /*
- * This class contains the functions to authenticate 
- * the user and verify the roles to restrict access or
- * allow access to certain areas
+ * This class object contains the functions to authenticate 
+ * the user through hashing of passwords
  */
 
 
