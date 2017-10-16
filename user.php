@@ -22,13 +22,13 @@
             then password is valid
         */  
        
-        private function is_password_valid() {   
+        private function is_password_valid($pw) {   
            /* need to add validation logic here */         
            return true;
         }
 
-        public function is_logged_in() {
-           if(is_password_valid()){
+        public function is_logged_in($pw) {
+           if(is_password_valid($pw)){
               return true;
            }
            return false;
@@ -46,16 +46,19 @@
         }
        
         public get_first_name() {
-           return $_user_fname;
+           return $this->_user_fname;
         }
      
         public get_last_name() {
-           return $_user_lname;
+           return $this->_user_lname;
         }
 
         public get_user_email() {
-           return $_email;
+           return $this->_email;
         }
         
+        public get_userid() {
+           return $this->_user_id;
+        }
   }
 ?>
