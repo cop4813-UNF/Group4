@@ -61,8 +61,8 @@
         	   	// sql to create table
 		    	  $sql = "CREATE TABLE IF NOT EXISTS User_Roles(
 		    	    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-		    	    user_id int(6),
-                            role_id int(6),
+		    	    user_id INT NOT NULL,
+                            role_id INT NOT NULL,
                             FOREIGN KEY (user_id) REFERENCES Users(id),  
                             FOREIGN KEY (role_id) REFERENCES Roles(id))";  
 			    	   
