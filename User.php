@@ -122,12 +122,14 @@
 			    $stmt->bindParam(':firstName', $firstName);
 			    $stmt->bindParam(':lastName', $lastName);
 			    $stmt->bindParam(':email', $email);
+		            $stmt->bindParam(':username', $username);
 			    $stmt->bindParam(':password', $password);			    
 			
 			    // insert a row
 			    $firstName = $this->filter_input($arr['firstName']);
 			    $lastName = $this->filter_input($arr['lastName']);
 			    $email = $this->filter_input($arr['email']);
+		            $username = $this->filter_input($arr['username']);
 			    $password = $this->filter_input($arr['password']);		     
 			    $password = $this->hash_password($password);
 			    $stmt->execute();
