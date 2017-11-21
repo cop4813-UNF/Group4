@@ -4,9 +4,8 @@
      <title>Osprey Emporium</title>	 
      <link rel="stylesheet" href="../css/style.css">
      <?php	 
-       require_once('debug.php');    
-	    require_once('User.php');	    
-	    require_once('Request.php');
+        require_once('debug.php');  
+        require_once('Request.php');
      ?>
 	 
 	 <style>
@@ -32,7 +31,7 @@
 		    <h1> Please Login: </h1><br>
 			<table>
 				<tr><td>
-				User ID:</td><td> <input type="text" name="userid"> 
+				Username:</td><td> <input type="text" name="username"> 
 				</td></tr>
 				<tr><td>
 				Password:</td><td> <input type="password" name="password"> 
@@ -49,13 +48,11 @@
 		</form>
 		 <?php
 		   $req = New Request(); 
-		   if ( isset( $_POST['register']) ) {
-		   	
+		   if ( isset( $_POST['register']) ) {		   	
 		   	$req->request_register_page();
 		   }
 		   
-		   if ( isset( $_POST['submit']) ) { 		     
-		      
+		   if ( isset( $_POST['submit']) ) { 
 		       $req->request_login($_POST['username'],$_POST['password'] );
 		   }
 		 ?>
