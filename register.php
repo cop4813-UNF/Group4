@@ -4,8 +4,7 @@
      <title>Osprey Emporium</title>	 
      <link rel="stylesheet" href="../css/style.css">
      <?php	 
-       require_once('debug.php');    
-	    require_once('User.php');	    
+            require_once('debug.php');    	     
 	    require_once('Request.php');
      ?>
 	 
