@@ -48,15 +48,15 @@
 			</table>
 		</form>
 		 <?php
-		    
+		   $req = New Request(); 
 		   if ( isset( $_POST['register']) ) {
-		   	$req = New Request();
+		   	
 		   	$req->request_register_page();
 		   }
 		   
 		   if ( isset( $_POST['submit']) ) { 		     
-		     $usr = New User();
-		
+		      
+		       $req->request_login($_POST['username'],$_POST['password'] );
 		   }
 		 ?>
 	  </div>
