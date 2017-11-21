@@ -34,10 +34,11 @@
         	   	// sql to create table
 		    	  $sql = "CREATE TABLE IF NOT EXISTS Users (
 		    	    user_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-		    	    firstName VARCHAR(128) NOT NULL,
-		    	    lastName VARCHAR(128),
-		    	    email VARCHAR(128),
-		    	    password VARCHAR(128),
+		    	    firstName VARCHAR(256) NOT NULL,
+		    	    lastName VARCHAR(256),
+		    	    email VARCHAR(256),
+			    username VARCHAR(256),
+		    	    password VARCHAR(256),
 		    	    role_id int(6)
 		        )";
 		        $this->query_exec($sql);		             	
@@ -117,8 +118,8 @@
 
     	
 			    // prepare sql and bind parameters
-			    $stmt = $conn->prepare("INSERT INTO Users (firstName, lastName, email, password)
-			    VALUES (:firstName, :lastName, :email, :password)");			
+			    $stmt = $conn->prepare("INSERT INTO Users (firstName, lastName, email, username, password)
+			    VALUES (:firstName, :lastName, :email, :username, :password)");			
 			    $stmt->bindParam(':firstName', $firstName);
 			    $stmt->bindParam(':lastName', $lastName);
 			    $stmt->bindParam(':email', $email);
