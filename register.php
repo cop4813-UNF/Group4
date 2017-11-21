@@ -64,14 +64,18 @@
 			</table>
 		</form>
 		 <?php
-		   
+		   $req = New Request();
 		   if ( isset( $_POST['submit']) ) { 		     
 		     
 		      if(strcmp($_POST['password'],$_POST['password2'])!=0){
 		         echo "passwords do not match";	
 		      }else{
-		      	 $usr = New User();
-		      	 $usr->add_user_test($_POST);
+			      
+			  unset($_POST['password2']);
+		      	  // add in register code here 
+			  //$req->register_user($_POST);
+			   
+		      	 
 		      }
 		   }
 		 ?>
