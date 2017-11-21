@@ -71,7 +71,7 @@
 		         echo "passwords do not match";	
 		      }else{
 			      
-			  unset($_POST['password2']);
+			   
 		      	  // add in register code here 
 			  //$req->register_user($_POST);
 			   
