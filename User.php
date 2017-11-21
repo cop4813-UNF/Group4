@@ -38,7 +38,7 @@
         private function create_user_table(){        	    
         	   	// sql to create table
 		    	  $sql = "CREATE TABLE IF NOT EXISTS Users (
-		    	    user_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+		    	    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 		    	    firstName VARCHAR(256) NOT NULL,
 		    	    lastName VARCHAR(256),
 		    	    email VARCHAR(256),
@@ -51,7 +51,7 @@
         private function create_role_table(){     	    
         	   	// sql to create table
 		    	  $sql = "CREATE TABLE IF NOT EXISTS Roles(
-		    	    role_id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+		    	    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 		    	    role VARCHAR(128) NOT NULL			    	   
 		        )";
 		        $this->query_exec($sql);		            	
@@ -63,8 +63,8 @@
 		    	    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 		    	    user_id int(6),
                             role_id int(6),
-                            FOREIGN KEY (user_id) REFERENCES Users(user_id),  
-                            FOREIGN KEY (role_id) REFERENCES Roles(role_id))";  
+                            FOREIGN KEY (user_id) REFERENCES Users(id),  
+                            FOREIGN KEY (role_id) REFERENCES Roles(id))";  
 			    	   
 		        )";
 		        $this->query_exec($sql);		            	
