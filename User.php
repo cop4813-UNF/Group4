@@ -29,7 +29,11 @@
    		  
         }
 
-
+        public function register_user($arr) {
+	   $this->add_user($arr);	
+		
+		
+	}
         private function create_user_table(){        	    
         	   	// sql to create table
 		    	  $sql = "CREATE TABLE IF NOT EXISTS Users (
