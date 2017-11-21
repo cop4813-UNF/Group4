@@ -26,6 +26,7 @@
    		   }	   
    		   $this->create_user_table();	  
    		   $this->create_role_table();	
+		   $this->create_user_role_table();
    		  
         }
 
@@ -42,8 +43,7 @@
 		    	    lastName VARCHAR(256),
 		    	    email VARCHAR(256),
 			    username VARCHAR(256),
-		    	    password VARCHAR(256),
-		    	    role_id int(6)
+		    	    password VARCHAR(256) 
 		        )";
 		        $this->query_exec($sql);		             	
         }
@@ -56,6 +56,20 @@
 		        )";
 		        $this->query_exec($sql);		            	
         }
+	       
+	private function create_user_role_table(){     	    
+        	   	// sql to create table
+		    	  $sql = "CREATE TABLE IF NOT EXISTS User_Roles(
+		    	    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+		    	    user_id int(6),
+                            role_id int(6),
+                            FOREIGN KEY (user_id) REFERENCES Users(user_id),  
+                            FOREIGN KEY (role_id) REFERENCES Roles(role_id))";  
+			    	   
+		        )";
+		        $this->query_exec($sql);		            	
+        }
+        
         
        
         
