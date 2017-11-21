@@ -30,6 +30,52 @@
    		  
         }
 
+	       
+	
+
+
+
+         public function is_admin($id) {
+
+         // Create connection
+          $conn = new mysqli($servername, $username, $password, $dbname);
+
+         // Check connection
+         if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+          }
+
+
+
+
+	 $sql = "SELECT user_id 
+                 FROM 
+                   User_Roles UR 
+                 INNER JOIN Roles R on 
+                    UR.role_id = R.id 
+                 WHERE 
+                    R.role = 'admin' AND 
+                    UR.user_id = ? LIMIT 1";   
+
+
+         $stmt = $conn->prepare($sql);
+         $stmt->bind_param("i", $user_id);
+         $user_id = $id;
+         $stmt->execute();
+
+          if ($stmt->fetch() == 0){
+             $result = false;
+          } else {
+             $result = true;
+          }
+
+         $stmt->close();
+         $conn->close();
+         return $result;
+
+         }
+	       
+	       
         public function register_user($arr) {
 	   $this->add_user($arr);	
 		
