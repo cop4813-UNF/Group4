@@ -3,10 +3,7 @@
        require_once('Database.php');
        
        Class User extends Database {
-       /* hashed password used for this app, includes salt */
-       // private $pw_hash = '$2y$10$n2X/GQh1rJgd88Uc2NTT3Oc.jjCZp0kWnOUlM1KA0EiKC3cYJy3gG';
-
-
+      
         public function __construct(){                    		  
 		      $this->get_user_data();	
 		      parent::__construct();
@@ -17,7 +14,7 @@
    		   $this->create_role_table();			       
 		      $this->create_admin_user();	
 		      $this->create_admin_role($this->username);	  
-		      $_SESSION['user']= NULL;		      
+		      $_SESSION['username']= NULL;		      
         }
 
 	       
@@ -53,7 +50,7 @@
 	                ON Roles.user_id = Users.id
                    LIMIT 1 ';
 	                $result = $conn->query($role_exist);
-	                print_r($result);
+	               
 	                if ($result->num_rows == 0) {
 		      	      $sql = 'INSERT INTO Roles (id,  role, user_id) VALUES (NULL, "admin",' . $admin_id. ')'; 
 				         $result = $conn->query($sql);
@@ -62,8 +59,39 @@
 			       $conn = null;        
          }
 
+         public function create_customer($post_arr){
+         	$this->add_user($post_arr);
+         	$this->create_customer_role($post_arr['username']);
+         	
+         }
          
-         public function is_admin($id) {
+         private function create_customer_role($usr) {   
+	           $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	             
+	           $check= 'SELECT id FROM Users WHERE username = "' . $usr . '" LIMIT 1';
+	           $result = $conn->query($check);
+	           if ($result->num_rows > 0) {
+	                $rows = $result->fetch_array(MYSQLI_ASSOC);
+	                $usr_id = $rows['id'];
+	                
+	                $role_exist = 'SELECT Users.id, Roles.role 
+	                FROM  Users
+	                INNER JOIN Roles 
+	                ON Roles.user_id = Users.id
+                   LIMIT 1 ';
+	                $result = $conn->query($role_exist);
+	               
+	                if ($result->num_rows == 0) {
+		      	      $sql = 'INSERT INTO Roles (id,  role, user_id) VALUES (NULL, "customer",' . $usr_id. ')'; 
+				         $result = $conn->query($sql);
+				       } 
+				     }
+			       $conn = null;        
+         }
+
+
+
+         
+         public function is_admin($username) {
 
          // Create connection
           $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
@@ -77,11 +105,7 @@
          }
 	       
 	       
-         public function register_user($arr) {
-	      $this->add_user($arr);	
-		
-		
-	}
+         
         private function create_user_table(){        	    
         	   	// sql to create table
 		    	  $sql = "CREATE TABLE IF NOT EXISTS Users (
@@ -122,29 +146,29 @@
            return false;
 	   }
 
-        public function log_in($uid, $pw) {
+        public function log_in($usr, $pw) {
            if($this->is_password_valid($pw)){  
-              $_SESSION['user']=$uid;  
+              $_SESSION['username']=$usr;  
 			     return true;
            }		     
            return false;
         }
         
 		public function get_user_id(){
-			if(isset($_SESSION['user'])) {
-				return $_SESSION['user'];
+			if(isset($_SESSION['username'])) {
+				return $_SESSION['username'];
 			} else {
 			  return false;
 			}
 		}
 		public function log_out() {
-			$_SESSION['user']=NULL;
+			$_SESSION['username']=NULL;
 			
 		}
 		
 		
         public function display_user_name() {
-           echo 'Welcome ' .$_SESSION['user'];
+           echo 'Welcome ' .$_SESSION['username'];
         }
         
         public function add_user_test($arr){
@@ -162,7 +186,8 @@
                echo "This email address is considered INVALID.\n";            
             }        
         }
-        public function add_user($arr){
+        
+        private function add_user($arr){
          try {
              $conn = new PDO("mysql:host=$this->servername;dbname=$this->dbname", 
              $this->username, $this->password);
@@ -176,7 +201,7 @@
 			    $stmt->bindParam(':firstName', $firstName);
 			    $stmt->bindParam(':lastName', $lastName);
 			    $stmt->bindParam(':email', $email);
-		            $stmt->bindParam(':username', $username);
+		       $stmt->bindParam(':username', $username);
 			    $stmt->bindParam(':password', $password);			    
 			
 			    // insert a row
@@ -196,17 +221,6 @@
 			  $conn = null;        
         }
                
-
-
-         private function get_user_data() {            
-          //  $ufile = new Datafile($this->file);
-			//$arr = $ufile->get_file_data(); 
-  
-          //  foreach ($arr as $value) { 
-//parse_str($value, $output);      
-            //   $this->stored_users[$output['user']] = $output['password'];
-           // }   
-        }
 
      }
        
