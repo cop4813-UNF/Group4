@@ -6,7 +6,8 @@
 		   protected $dbname = "group4";
 		
 		
-		   protected function __construct() {		      
+		   protected function __construct() {
+		      
 		      try {
 		         $this->create_database();
 		         $conn = new PDO("mysql:host=$this->servername;dbname=$this->dbname", $this->username, 

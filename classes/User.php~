@@ -53,7 +53,7 @@
 	                ON Roles.user_id = Users.id
                    LIMIT 1 ';
 	                $result = $conn->query($role_exist);
-	                 
+	                print_r($result);
 	                if ($result->num_rows == 0) {
 		      	      $sql = 'INSERT INTO Roles (id,  role, user_id) VALUES (NULL, "admin",' . $admin_id. ')'; 
 				         $result = $conn->query($sql);
