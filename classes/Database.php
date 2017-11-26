@@ -1,8 +1,8 @@
 <?php
 		Class Database {		    
 		   protected $servername = "localhost";
-		   protected $username = "root";
-		   protected $password = "zdrnko114";
+		   protected $username = "";
+		   protected $password = "";
 		   protected $dbname = "group4";
 		
 		
