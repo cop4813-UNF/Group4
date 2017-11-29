@@ -12,6 +12,21 @@
 	        	      
 	   }
 	
+           public function admin_action() {
+  $admin = 1;
+
+  return $admin;
+}
+
+
+
+public function customer_action() {
+   $customer = 1;
+
+   return $customer;
+}
+		
+		
 	   public function request_register_page(){
             header("Location: ../register.php");
       }
