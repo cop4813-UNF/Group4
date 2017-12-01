@@ -257,12 +257,11 @@ password)
 			    $firstName = $this->filter_input($arr['firstName']);
 			    $lastName = $this->filter_input($arr['lastName']);
 			    $email = $this->filter_input($arr['email']);
-		            $username = $this->filter_input($arr['username']);
-		            $this->create_customer_role($username);
+		            $username = $this->filter_input($arr['username']);		            
 			    $password = $this->filter_input($arr['password']);		     
 			    $password = $this->hash_password($password);
 			    $stmt->execute();
-			    
+			    $this->create_customer_role($username);
 			    echo "New record created successfully";
 			}
 			catch(PDOException $e) {
