@@ -7,10 +7,10 @@
 
 
 
-     <!-- Enter page content here -->
+ 
 
      <div class="container" >
-     
+        <!-- Enter page content here -->
      </div>
      <?php	           
          require_once('templates/footer.php');
