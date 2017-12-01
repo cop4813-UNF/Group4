@@ -12,19 +12,17 @@
 	        	      
 	   }
 	
-           public function admin_action() {
-  $admin = $usr->is_admin();
-
-  return $admin;
+public function admin_action() {
+  if(!$usr->is_admin()) {
+     header("Location: ../admin_error.php");
+  }
 }
-
-
-
 public function customer_action() {
-   $customer = $usr->is_customer();
-
-   return $customer;
+   if(!$usr->is_customer()) {
+      header("Location: ../customer_error.php");
+   }
 }
+
 		
 		
 	   public function request_register_page(){
