@@ -222,14 +222,18 @@ $usr_id. ')';
             }        
         }
         
-	public function register_user($arr) {
-           /* query user table to verify if user exists.
-	    if user does not exist, 
-	       $this->add_user($arr);
-	    */
+	public function register_user($arr) {      
+   $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	             
+   $check= 'SELECT id FROM Users WHERE username = "' . $arr['username'] . '" LIMIT 1';
+   $result = $conn->query($check);
+   if ($result->num_rows == 0) {
+      $this->add_user($arr);
+   }else{
+      echo "Error. Duplicate User";
+
+   }
 		
-		
-	}
+}
 	       
         private function add_user($arr){
          try {
