@@ -1,5 +1,4 @@
 <?php
-
        require_once('Database.php');
        
        Class User extends Database {
@@ -12,11 +11,9 @@
    		   }	   
    		   $this->create_user_table();	  
    		   $this->create_role_table();			       
-		      $this->create_admin_user();	
-		      $this->create_admin_role($this->username);	  
-		      $_SESSION['username']= NULL;		      
+		   $this->create_admin_user();	
+		   $this->create_admin_role($this->username);	  		   		      
         }
-
 	       
 	      private function create_admin_user(){
 	      	   $pw = $this->hash_password($this->password);	      	
@@ -24,20 +21,25 @@
 	             
 	   	       $check= 'SELECT id FROM Users WHERE username = "' . $this->username . '" LIMIT 1';
 		      	 $sql = 'INSERT INTO Users (id,  firstName,  lastName, email, username,
-		      	 password) VALUES (NULL, NULL, NULL, NULL, "' . $this->username . '","' .  $pw . '")';	
+		      	 password) VALUES (NULL, NULL, NULL, NULL, "' . $this->username . '","' .  $pw . 
+
+'")';	
 		          $result = $conn->query($check);
 		          		          
 		          if ($result->num_rows == 0) {
 		          	$sql = 'INSERT INTO Users (id,  firstName,  lastName, email, username,
-		      	   password) VALUES (NULL, NULL, NULL, NULL, "' . $this->username . '","' .  $pw . '")';	         
+		      	   password) VALUES (NULL, NULL, NULL, NULL, "' . $this->username . '","' .  $pw . 
+
+'")';	         
 		            $result = $conn->query($sql);
 		          }
 		    
 			       $conn = null;        
          }
-
          private function create_admin_role($username) {   
-	              $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	             
+	              $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	     
+
+        
 	              $check= 'SELECT id FROM Users WHERE username = "' . $username . '" LIMIT 1';
 	              $result = $conn->query($check);
 	              if ($result->num_rows > 0) {
@@ -52,13 +54,14 @@
 	                $result = $conn->query($role_exist);
 	               
 	                if ($result->num_rows == 0) {
-		      	      $sql = 'INSERT INTO Roles (id,  role, user_id) VALUES (NULL, "admin",' . $admin_id. ')'; 
+		      	      $sql = 'INSERT INTO Roles (id,  role, user_id) VALUES (NULL, "admin",' . 
+
+$admin_id. ')'; 
 				         $result = $conn->query($sql);
 				       } 
 				     }
 			       $conn = null;        
          }
-
          public function create_customer($post_arr){
          	$this->add_user($post_arr);
          	$this->create_customer_role($post_arr['username']);
@@ -66,7 +69,9 @@
          }
          
          private function create_customer_role($usr) {   
-	           $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	             
+	           $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	     
+
+        
 	           $check= 'SELECT id FROM Users WHERE username = "' . $usr . '" LIMIT 1';
 	           $result = $conn->query($check);
 	           if ($result->num_rows > 0) {
@@ -77,36 +82,20 @@
 	                FROM  Users
 	                INNER JOIN Roles 
 	                ON Roles.user_id = Users.id
-                   LIMIT 1 ';
+                        LIMIT 1 ';
 	                $result = $conn->query($role_exist);
 	               
 	                if ($result->num_rows == 0) {
-		      	      $sql = 'INSERT INTO Roles (id,  role, user_id) VALUES (NULL, "customer",' . $usr_id. ')'; 
+		      	      $sql = 'INSERT INTO Roles (id,  role, user_id) VALUES (NULL, "customer",' . 
+
+$usr_id. ')'; 
 				         $result = $conn->query($sql);
 				       } 
 				     }
 			       $conn = null;        
          }
-
-
-
          
-         public function is_admin($username) {
-
-         // Create connection
-          $conn = new mysqli($this->servername, $this->username, $this->password, $this->dbname);
-
-         // Check connection
-         if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-          }
-
-         
-         }
-	       
-	       
-         
-        private function create_user_table(){        	    
+       private function create_user_table(){        	    
         	   	// sql to create table
 		    	  $sql = "CREATE TABLE IF NOT EXISTS Users (
 		    	    id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -129,9 +118,40 @@
 		        $this->query_exec($sql);		            	
         }
 	       
-	     
+	public function is_admin() {
+             if(!empty(trim($_SESSION['username']))){
+                if(trim($_SESSION['role']) == "admin" ){
+                     return true;
+                 } else {
+                     return false;
+                 }
+             }
+         }
+	       
+	 public function is_customer() {
+             if(!empty(trim($_SESSION['username']))){
+                if(trim($_SESSION['role']) == "customer" ){
+                     return true;
+                 } else {
+                     return false;
+                 }
+             }
+         }   
+         
         
-       
+        
+        private function get_stored_password($usr){
+          $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	             
+
+          $pw = NULL;
+	  $check= 'SELECT password FROM Users WHERE username = "' . $usr . '" LIMIT 1';
+	  $result = $conn->query($check);
+	  if ($result->num_rows > 0) {
+             $rows = $result->fetch_array(MYSQLI_ASSOC);
+	     $pw = $rows['password'];
+           }
+           return $pw;
+        }
         
         private function hash_password($password){
            return password_hash($password, PASSWORD_DEFAULT);
@@ -139,17 +159,42 @@
         
         private function is_password_valid($uid, $password) {    
           if(empty(trim($uid)) != TRUE){		
-			   if(password_verify ($password, $this->get_stored_password($uid))) {
-				  return true;
-			   }
-		   }
-           return false;
+	     if(password_verify ($password, $this->get_stored_password($uid))) {
+		 return true;
+	      }
 	   }
+           return false;
+	}
+
+        private function get_user_role($usr){
+             $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);
+             $role = NULL;
+                  
+                         $sql = 'SELECT Users.id, Roles.role 
+	                         FROM  
+                                    Users
+	                         INNER JOIN Roles 
+	                            ON Roles.user_id = Users.id
+                                 WHERE  
+                                    Users.id ="' . $usr . '"';
+          
+               $result = $conn->query($sql);
+	        if ($result->num_rows > 0) {
+                     $rows = $result->fetch_array(MYSQLI_ASSOC);
+                     $role = $rows['role'];
+                 }
+                 return $role;
+
+           }  
+
 
         public function log_in($usr, $pw) {
-           if($this->is_password_valid($pw)){  
+           $_SESSION['username']= NULL;
+           $_SESSION['role']= NULL;	
+           if($this->is_password_valid($usr, $pw)){  
               $_SESSION['username']=$usr;  
-			     return true;
+              $_SESSION['role']=$this->get_user_role($usr);
+	      return true;
            }		     
            return false;
         }
@@ -166,12 +211,7 @@
 			
 		}
 		
-        public function add_user_test($arr){
-        	 // print_r($arr);
-        	  if(empty($arr['firstName']) || empty($arr['lastName']))
-               echo "First and Last Name is needed";      	  
-        	  $this->validate_email($arr['email']);
-        }
+         
           
           
         private function validate_email($email){
@@ -188,10 +228,11 @@
              $this->username, $this->password);
     	       // set the PDO error mode to exception
    	       $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);			
-
     	
 			    // prepare sql and bind parameters
-			    $stmt = $conn->prepare("INSERT INTO Users (firstName, lastName, email, username, password)
+			    $stmt = $conn->prepare("INSERT INTO Users (firstName, lastName, email, username, 
+
+password)
 			    VALUES (:firstName, :lastName, :email, :username, :password)");			
 			    $stmt->bindParam(':firstName', $firstName);
 			    $stmt->bindParam(':lastName', $lastName);
@@ -216,10 +257,7 @@
 			  $conn = null;        
         }
                
-
      }
        
-
-
    
 ?>
