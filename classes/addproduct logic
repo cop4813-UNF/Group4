@@ -1,0 +1,44 @@
+       private function insert_product($arr){
+         try {
+             $conn = new PDO("mysql:host=$this->servername;dbname=$this->dbname", 
+             $this->username, $this->password);
+    	       // set the PDO error mode to exception
+   	       $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);			
+    	
+			    // prepare sql and bind parameters
+			    $stmt = $conn->prepare("INSERT INTO Products (item_name, item_description, 
+                            price, quantity, image_link)
+			    VALUES (:item_name, :item_description, :price, :quantity, :image_link)");			
+			    $stmt->bindParam(':item_name', $item_name);
+			    $stmt->bindParam(':item_description', $item_description);
+			    $stmt->bindParam(':price', $price);
+		            $stmt->bindParam(':quantity', $quantity);
+			    $stmt->bindParam(':image_link', $image_link);			    
+			
+			    // insert a row
+			    $item_name = $this->filter_input($arr['item_name']);
+			    $item_description = $this->filter_input($arr['item_description']);
+			    $price =  $arr['price'];
+		            $quantity = $arr['quantity'];
+			    $image_link = $arr['image_link'];
+			    $stmt->execute();
+			    echo "New record created successfully";
+			}
+			catch(PDOException $e) {
+			   echo "Error: " . $e->getMessage();
+			}
+			  $conn = null;        
+        }
+
+
+       public function add_product($arr) {
+          $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);
+	  $check= 'SELECT id FROM Products WHERE item_name = "' . $arr['item_name'] . 
+          '" AND price = ' . $arr['price'] .  'LIMIT 1';
+          $result = $conn->query($check);
+          if ($result->num_rows == 0) { 
+              $this->insert_product($arr);
+          } else {
+             print '<div class="error"> This is a duplicate entry. Please verify product entry</div>';
+          }
+       }
