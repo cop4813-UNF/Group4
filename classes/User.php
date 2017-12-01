@@ -222,6 +222,15 @@ $usr_id. ')';
             }        
         }
         
+	public function register_user($arr) {
+           /* query user table to verify if user exists.
+	    if user does not exist, 
+	       $this->add_user($arr);
+	    */
+		
+		
+	}
+	       
         private function add_user($arr){
          try {
              $conn = new PDO("mysql:host=$this->servername;dbname=$this->dbname", 
