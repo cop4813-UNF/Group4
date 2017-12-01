@@ -13,7 +13,7 @@
 	   }
 	
            public function admin_action() {
-  $admin = 1;
+  $admin = $usr->is_admin();
 
   return $admin;
 }
@@ -21,7 +21,7 @@
 
 
 public function customer_action() {
-   $customer = 1;
+   $customer = $usr->is_customer();
 
    return $customer;
 }
