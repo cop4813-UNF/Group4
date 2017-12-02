@@ -28,9 +28,7 @@
                 unset($_SESSION['cart']['item_name']);     
             }
             
-            public function view_cart(){
-               return $_SESSION['cart'];
-            }
-}
+       }
+
 
 ?>

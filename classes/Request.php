@@ -1,7 +1,7 @@
 
 <?php
         require_once('User.php');
-	 
+	     require_once('Product.php');
 	Class Request {
 		
 	   public function __construct() {		
@@ -43,16 +43,25 @@ public function customer_action() {
 	  }
 	  
 	  public function get_all_products(){
+	  	   $prod = New Product();
+	  	   $output_array = $prod->get_all_products();
 	  
 	  }
 		
 		public function select_products($category){
+		  $prod = New Product();
+		  $output_array = $prod->select_products($category);
+		}
+		public function add_to_cart($post_array){
+			$sc = New ShoppingCart();
+		   $sc->add_to_cart($post_array);
+		}
+		
+		public function view_cart(){
+		  $sc = New ShoppingCart();
+		   $sc->view_cart();		
 		
 		}
-		public function add_to_cart(){
-			
-		}
-		
 	   public function get_username(){
 	   	$usr = New User();
      	   if($usr->get_username()){
