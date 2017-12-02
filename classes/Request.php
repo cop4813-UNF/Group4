@@ -42,6 +42,12 @@ public function customer_action() {
 		 }	  
 	  }
 	  
+	  public function add_new_product($post_array){
+       	 $prod = New Product();
+       	 $prod->insert_product($post_array) 
+	  }
+	  
+	  
 	  public function get_all_products(){
 	  	   $prod = New Product();
 	  	   $output_array = $prod->get_all_products();

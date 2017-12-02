@@ -57,6 +57,24 @@
         	
         }     
         
+        public function insert_product($arr){
+            $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	
+	                
+            $sql = 'INSERT INTO Products (item_name, item_description, price, quantity, image_link) 
+            VALUES (?,?,?,?,?)'; 
+              $stmt = $conn->prepare($sql);
+              $stmt->bind_param("ssdds", $item_name, $description,$price,$qty,$link);
+              $item_name = $arr['item_name'];
+              $description = $arr['item_description'];
+              $price = $arr['price'];
+              $qty = $arr['quantity'];
+              $link = $arr['image_link'];
+              $stmt->execute();				        
+				  print '<div class ="success">Product added successfully</div>';
+				  $conn = NULL;
+			 }        
+        
+        
 
   }
 

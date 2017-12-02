@@ -57,6 +57,11 @@ public function customer_action() {
 		   $sc->add_to_cart($post_array);
 		}
 		
+		public function view_cart(){
+		  $sc = New ShoppingCart();
+		   $sc->view_cart();		
+		
+		}
 	   public function get_username(){
 	   	$usr = New User();
      	   if($usr->get_username()){
