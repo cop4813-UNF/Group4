@@ -1,4 +1,5 @@
 <?php
+require_once("classes/User.php");
 Print '
 <!DOCTYPE html>
 <html lang="en">
@@ -55,7 +56,7 @@ Print '
         <li><a href="#">Contact</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-user"></span> Your Account</a></li>
+        <li><a href="login.php"><span class="glyphicon glyphicon-user"></span> Login</a></li>
         <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
       </ul>
     </div>

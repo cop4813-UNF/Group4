@@ -1,10 +1,10 @@
 <?php
        require_once('Database.php');
-       
+        
        Class User extends Database {
       
         public function __construct(){                    		  
-		      $this->get_user_data();	
+		      
 		      parent::__construct();
 	   	   if (session_status() !== PHP_SESSION_ACTIVE) {
      		      @session_start();
@@ -68,32 +68,20 @@ $admin_id. ')';
          	
          }
          
-         private function create_customer_role($usr) {   
-	           $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	     
-
-        
-	           $check= 'SELECT id FROM Users WHERE username = "' . $usr . '" LIMIT 1';
-	           $result = $conn->query($check);
-	           if ($result->num_rows > 0) {
-	                $rows = $result->fetch_array(MYSQLI_ASSOC);
-	                $usr_id = $rows['id'];
+         private function create_customer_role($id) {   
+	           $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	
 	                
-	                $role_exist = 'SELECT Users.id, Roles.role 
-	                FROM  Users
-	                INNER JOIN Roles 
-	                ON Roles.user_id = Users.id
-                        LIMIT 1 ';
-	                $result = $conn->query($role_exist);
-	               
-	                if ($result->num_rows == 0) {
-		      	      $sql = 'INSERT INTO Roles (id,  role, user_id) VALUES (NULL, "customer",' . 
-
-$usr_id. ')'; 
-				         $result = $conn->query($sql);
-				       } 
-				     }
-			       $conn = null;        
-         }
+              $sql = 'INSERT INTO Roles (role, user_id) VALUES (?,?)'; 
+              $stmt = $conn->prepare($sql);
+              $stmt->bind_param("sd", $role, $user_id);
+              $role = "customer";
+              $user_id = $id;
+              $stmt->execute();				        
+				  print '<div class ="welcome">Thanks for registering</div>';
+				  $conn = NULL;
+			 }
+			             
+       
          
        private function create_user_table(){        	    
         	   	// sql to create table
@@ -124,7 +112,9 @@ $usr_id. ')';
                      return true;
                  } else {
                      return false;
-                 }
+                 }             
+             }else{
+             	return false;
              }
          }
 	       
@@ -134,7 +124,9 @@ $usr_id. ')';
                      return true;
                  } else {
                      return false;
-                 }
+                 } 
+             }else{
+             	return false;
              }
          }   
          
@@ -157,49 +149,49 @@ $usr_id. ')';
            return password_hash($password, PASSWORD_DEFAULT);
         }
         
-        private function is_password_valid($uid, $password) {    
-          if(empty(trim($uid)) != TRUE){		
-	     if(password_verify ($password, $this->get_stored_password($uid))) {
-		 return true;
-	      }
-	   }
-           return false;
-	}
+        private function is_password_valid($uid, $password) {             
+          $hash_pw = $this->get_stored_password($uid);  
+		     if(password_verify ($password, $hash_pw )) {		     	  
+			      return true;
+		      }
+		      return false;
+	     }
+           
 
         private function get_user_role($usr){
              $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);
              $role = NULL;
-                  
-                         $sql = 'SELECT Users.id, Roles.role 
-	                         FROM  
-                                    Users
-	                         INNER JOIN Roles 
-	                            ON Roles.user_id = Users.id
-                                 WHERE  
-                                    Users.id ="' . $usr . '"';
+             $sql = 'SELECT Users.id, Users.username, Roles.role 
+	             FROM  Users
+	             INNER JOIN Roles 
+	             ON Roles.user_id = Users.id
+                WHERE Users.username="' . $usr . '"';
           
                $result = $conn->query($sql);
-	        if ($result->num_rows > 0) {
-                     $rows = $result->fetch_array(MYSQLI_ASSOC);
+	            if ($result->num_rows > 0) {
+                     $rows = $result->fetch_array(MYSQLI_ASSOC);                     
                      $role = $rows['role'];
-                 }
-                 return $role;
+               }
+               return $role;
 
            }  
 
 
-        public function log_in($usr, $pw) {
-           $_SESSION['username']= NULL;
-           $_SESSION['role']= NULL;	
+        public function log_in($arr) {        	 
+        	  $usr = $arr['username'];
+        	  $pw = $arr['password'];
+           $_SESSION['username']=NULL;  
+           $_SESSION['role']=NULL;
            if($this->is_password_valid($usr, $pw)){  
+              $role = $this->get_user_role($usr);
               $_SESSION['username']=$usr;  
-              $_SESSION['role']=$this->get_user_role($usr);
-	      return true;
-           }		     
-           return false;
+              $_SESSION['role']=$role;
+              return true;
+           }
+              return false;
         }
         
-		public function get_user_id(){
+		public function get_username(){
 			if(isset($_SESSION['username'])) {
 				return $_SESSION['username'];
 			} else {
@@ -208,7 +200,7 @@ $usr_id. ')';
 		}
 		public function log_out() {
 			$_SESSION['username']=NULL;
-			
+			$_SESSION['role']=NULL;
 		}
 		
          
@@ -222,18 +214,19 @@ $usr_id. ')';
             }        
         }
         
-	public function register_user($arr) {      
-   $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	             
-   $check= 'SELECT id FROM Users WHERE username = "' . $arr['username'] . '" LIMIT 1';
-   $result = $conn->query($check);
-   if ($result->num_rows == 0) {
-      $this->add_user($arr);
-   }else{
-      echo "Error. Duplicate User";
-
-   }
-		
-}
+			public function register_user($arr) {  				   
+			   $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	             
+			   $check= 'SELECT id FROM Users WHERE username = "' . $arr['username'] . '" LIMIT 1';
+			   $result = $conn->query($check);
+			   if ($result->num_rows == 0) {
+			      if($this->add_user($arr)) {
+			         return true;
+			      }
+			   }else{
+			      print '<div class ="error">Error. Duplicate User</div>';			
+			   }		
+			   return false;		
+		   }
 	       
         private function add_user($arr){
          try {
@@ -257,16 +250,19 @@ password)
 			    $firstName = $this->filter_input($arr['firstName']);
 			    $lastName = $this->filter_input($arr['lastName']);
 			    $email = $this->filter_input($arr['email']);
-		            $username = $this->filter_input($arr['username']);		            
+		       $username = $this->filter_input($arr['username']);		            
 			    $password = $this->filter_input($arr['password']);		     
 			    $password = $this->hash_password($password);
 			    $stmt->execute();
-			    $this->create_customer_role($username);
-			    echo "New record created successfully";
+			 
+			    $last_id = $conn->lastInsertId();
+			    $this->create_customer_role($last_id);
+			    return true;
 			}
 			catch(PDOException $e) {
-			   echo "Error: " . $e->getMessage();
+			   echo "Error: " . $e->getMessage();			   
 			}
+			  return false;
 			  $conn = null;        
         }
                

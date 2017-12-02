@@ -1,8 +1,8 @@
 <?php
 		Class Database {		    
 		   protected $servername = "localhost";
-		   protected $username = "";
-		   protected $password = "";
+		   protected $username = "root";
+		   protected $password = "zdrnko114";
 		   protected $dbname = "group4";
 		
 		
@@ -175,7 +175,7 @@
 		  }
 
           /* remove all html tags and values behind them */
-          private function filter_input($str) {
+          protected function filter_input($str) {
              return filter_var($str, FILTER_SANITIZE_STRING);
           }
     }  
