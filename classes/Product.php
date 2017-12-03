@@ -33,9 +33,14 @@
         public function get_all_products(){
               $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	             
               $sql= 'SELECT item_name, item_description, price, quantity, image_link FROM Products';
-	           $result = $conn->query($sql);
+	          $result = $conn->query($sql);
+			  $rows = [];
+			  
 	           if ($result->num_rows > 0) {
-                  $rows = $result->fetch_array(MYSQLI_ASSOC);
+				   while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))
+				   {
+					   $rows[] = $row;
+				   }
 	               return $rows;
               }
               print 'No products present in  the table';
@@ -48,8 +53,12 @@
               INNER JOIN Categories on Products.id = Categories.product_id where 
               Categories.category =' .$category;
 	           $result = $conn->query($sql);
+			   $rows = [];
 	           if ($result->num_rows > 0) {
-                  $rows = $result->fetch_array(MYSQLI_ASSOC);
+				  while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC))
+				   {
+					   $rows[] = $row;
+				   }
 	               return $rows;
               }
               print 'No products found for that category';
