@@ -1,6 +1,6 @@
 <?php
        require_once('Database.php');
-       
+       require_once('Order.php');
        Class ShoppingCart  {
        
 
@@ -12,6 +12,7 @@
      		      @session_start();
    		   }	
    		   $this->create_shopping_cart();
+   		   $ord = New Order();
    		}   
    	
    		   private function create_shopping_cart(){
@@ -33,8 +34,12 @@
             } 
             
             public function add_to_cart($post_array){
-                 $_SESSION['cart'][$post_array['item_name']]=$post_array; 
-                 $_SESSION['cart'][$post_array['item_name']]['qty']=1;        
+            	 if(!isset($_SESSION['cart'][$post_array['item_name']])){
+	                $_SESSION['cart'][$post_array['item_name']]=$post_array; 
+	                $_SESSION['cart'][$post_array['item_name']]['qty']=1;  
+                }else{
+                   $this->add_qty($post_array['item_name'],1);
+                }       
             }
           
              public function remove_from_cart($item_name){
@@ -43,6 +48,10 @@
             
             public function view_cart(){
                return $_SESSION['cart'];
+            }
+            
+            public function checkout(){
+            	return;
             }
 }
 

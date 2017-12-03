@@ -42,15 +42,23 @@ public function customer_action() {
 		 }	  
 	  }
 	  
+	  public function add_new_product($post_array){
+       	 $prod = New Product();
+       	 $prod->insert_product($post_array); 
+	  }
+	  
+	  
 	  public function get_all_products(){
 	  	   $prod = New Product();
 	  	   $output_array = $prod->get_all_products();
+	  	   return $output_array;
 	  
 	  }
 		
 		public function select_products($category){
 		  $prod = New Product();
 		  $output_array = $prod->select_products($category);
+		  return $output_array;
 		}
 		public function add_to_cart($post_array){
 			$sc = New ShoppingCart();

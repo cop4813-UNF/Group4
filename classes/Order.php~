@@ -13,7 +13,7 @@
    		   }	
    
    		   $this->create_orders_table();	  
-   		   $this->create_orderlines_table();
+   		     
           }
 
            private function create_orders_table() {

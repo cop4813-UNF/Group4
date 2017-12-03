@@ -57,7 +57,18 @@
         	
         }     
         
-        public function insert_product($arr){
+        public function add_product($arr) {         				   
+			   $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	             
+			   $check= 'SELECT id FROM Products WHERE item_name = "' . $arr['item_name'] . '" LIMIT 1';
+			   $result = $conn->query($check);
+			   if ($result->num_rows == 0) {
+			      $this->insert_product($arr);
+			   }	
+		   }
+        	
+        
+        
+        private function insert_product($arr){
             $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	
 	                
             $sql = 'INSERT INTO Products (item_name, item_description, price, quantity, image_link) 
@@ -69,12 +80,25 @@
               $price = $arr['price'];
               $qty = $arr['quantity'];
               $link = $arr['image_link'];
-              $stmt->execute();				        
+              $stmt->execute();
+              $last_id = $conn->lastInsertId();			
+              $this->insert_category($last_id, $arr['category']);	        
 				  print '<div class ="success">Product added successfully</div>';
 				  $conn = NULL;
 			 }        
         
-        
+           private function insert_category($id, $category) {   
+	           $conn = new mysqli("localhost", $this->username, $this->password, $this->dbname);	
+	                
+              $sql = 'INSERT INTO Categories (product_id, category) VALUES (?,?)'; 
+              $stmt = $conn->prepare($sql);
+              $stmt->bind_param("ds", $prod_id, $cat);
+              $cat = $category;
+              $prod_id = $id;
+              $stmt->execute();	
+				  $conn = NULL;
+			 }
+			          
 
   }
 
