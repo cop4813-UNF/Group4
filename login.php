@@ -13,7 +13,7 @@
        <h2>Login </h2>
        <form  method="post" style="width:40%;">
          <div class="imgcontainer">
-           <img src="../images/profile_icon.png" alt="Avatar" class="avatar">
+           <img src="images/profile_icon.png" alt="Avatar" class="avatar" height="200" width="200">
          </div>
 
          <div class="container">
@@ -39,17 +39,17 @@
          <div class="container" style="background-color:#f1f1f1">
            <button type="button" class="cancelbtn">Cancel</button>
 		   <br>
-           Don't have an account? Register here: <span class="psw"> <a href="register.php">Register</a></span>
+           Don't have an account? <span class="psw"> <a href="register.php">Register</a></span>
          </div>
        </form>
      </div>
+	 
      <?php	           
          //require_once('templates/footer.php');
          if ( isset( $_POST['submit']) ) { 		     
 			    $req = New Request();
 			    $req->request_login($_POST);			    
-			}
-			
+			}	
      ?>
 
 
