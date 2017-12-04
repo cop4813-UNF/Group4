@@ -49,11 +49,11 @@ Print '
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">Products</a></li>
+        <li class="active"><a href="http://139.62.210.151/~group4/ospreyemporium/">Home</a></li>
+        <li><a href="http://139.62.210.151/~group4/ospreyemporium/products.php">Products</a></li>
         <li><a href="#">Deals</a></li>
-        <li><a href="#">Stores</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="http://139.62.210.151/~group4/ospreyemporium/stores.php">Stores</a></li>
+        <li><a href="http://139.62.210.151/~group4/ospreyemporium/contact.php">Contact</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="login.php"><span class="glyphicon glyphicon-user"></span> Login</a></li>
