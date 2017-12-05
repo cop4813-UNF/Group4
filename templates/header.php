@@ -1,5 +1,6 @@
 <?php
 require_once("classes/Request.php");
+$req = New Request();
 Print '
 <!DOCTYPE html>
 <html lang="en">
